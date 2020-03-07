@@ -18,6 +18,8 @@
 #include <linux/utsname.h>
 #include <trace/events/sched.h>
 
+
+
 /*
  * The number of tasks checked:
  */
@@ -72,7 +74,10 @@ static struct notifier_block panic_block = {
 	.notifier_call = hung_task_panic,
 };
 
+
+
 static void check_hung_task(struct task_struct *t, unsigned long timeout)
+
 {
 	unsigned long switch_count = t->nvcsw + t->nivcsw;
 
@@ -81,7 +86,8 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
 	 * Also, skip vfork and any other user process that freezer should skip.
 	 */
 	if (unlikely(t->flags & (PF_FROZEN | PF_FREEZER_SKIP)))
-	    return;
+
+		return;
 
 	/*
 	 * When a freshly created task is scheduled once, changes its state to
@@ -97,6 +103,8 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
 	}
 
 	trace_sched_process_hang(t);
+
+
 
 	if (!sysctl_hung_task_warnings)
 		return;
@@ -122,8 +130,9 @@ static void check_hung_task(struct task_struct *t, unsigned long timeout)
 	touch_nmi_watchdog();
 
 	if (sysctl_hung_task_panic) {
-		trigger_all_cpu_backtrace();
-		panic("hung_task: blocked tasks");
+
+			panic("hung_task: blocked tasks");
+
 	}
 }
 
@@ -155,11 +164,13 @@ static bool rcu_lock_break(struct task_struct *g, struct task_struct *t)
  * a really long time (120 seconds). If that happens, print out
  * a warning.
  */
+
 static void check_hung_uninterruptible_tasks(unsigned long timeout)
 {
 	int max_count = sysctl_hung_task_check_count;
 	int batch_count = HUNG_TASK_BATCHING;
 	struct task_struct *g, *t;
+
 
 	/*
 	 * If the system crashed already then all bets are off,
@@ -178,8 +189,10 @@ static void check_hung_uninterruptible_tasks(unsigned long timeout)
 				goto unlock;
 		}
 		/* use "==" to skip the TASK_KILLABLE tasks waiting on NFS */
+
 		if (t->state == TASK_UNINTERRUPTIBLE)
 			check_hung_task(t, timeout);
+
 	}
  unlock:
 	rcu_read_unlock();
