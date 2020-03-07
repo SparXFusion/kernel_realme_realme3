@@ -10,6 +10,11 @@
 #include <linux/rwsem.h>
 #include <linux/memcontrol.h>
 
+
+extern unsigned long reclaim_pages_from_list(struct list_head *page_list,
+					struct vm_area_struct *vma);
+
+
 /*
  * The anon_vma heads a list of private "related" vmas, to scan if
  * an anonymous page pointing to this anon_vma needs to be unmapped:
@@ -177,6 +182,7 @@ int page_referenced(struct page *, int is_locked,
 #define TTU_ACTION(x) ((x) & TTU_ACTION_MASK)
 
 int try_to_unmap(struct page *, enum ttu_flags flags);
+
 
 /*
  * Used by uprobes to replace a userspace page safely
